@@ -1,13 +1,34 @@
 public class Edge {
   int u;
   int v;
+  int distance;
+  int timeToTravel;
+  String originName;
+  String destinationName;
 
-  public Edge(int u, int v) {
-    this.u = u;
-    this.v = v;
+  //connection constructor
+  public Edge(int tempu, int tempv) {
+    this.u = tempu;
+    this.v = tempv;
   }
 
-  public boolean equals(Object o){
-    return u == ((Edge) o).u && v == ((Edge) o).v;
+  //connection constructor with the names of cities
+  public Edge(int tempu, int tempv, String inputOrigin, String inputDestination) {
+    this.u = tempu;
+    this.v = tempv;
+    this.originName = inputOrigin;
+    this.destinationName = inputDestination;
+  }
+  public void swap(){
+    int tempU = u;
+    this.u = v;
+    this.v = tempU;
+    String tempOriginName = originName;
+    this.originName = destinationName;
+    this.destinationName = tempOriginName;
+  }
+
+  public boolean equals(Edge e){
+    return this.u == e.u && this.v == e.v;
   }
 }
