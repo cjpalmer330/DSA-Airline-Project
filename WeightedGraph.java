@@ -16,7 +16,7 @@ public class WeightedGraph<V> {
         Houston => {[Houston, Dallas],[Houston, San Antonio]}
         }
      */
-    ArrayList<ArrayList<Edge>> neighbors = new ArrayList<>();
+    LinkedList<LinkedList<Edge>> neighbors = new LinkedList<>();
     public WeightedGraph(String fileName){
         try {
             //file reader and buffered reader to get info from data.txt
@@ -56,7 +56,7 @@ public class WeightedGraph<V> {
                     //Origin city was not in ArrayList
                     if(originCity == -1 ){
                         addCity(tempTerms[0]);
-                        ArrayList<Edge> originArrayList = new ArrayList<>();
+                        LinkedList<Edge> originArrayList = new LinkedList<>();
                         neighbors.add(originArrayList);
                         //giving origin city the last index and iterating
                         originCity = vertexIndex;
@@ -67,7 +67,7 @@ public class WeightedGraph<V> {
                         this.addCity(tempTerms[1]);
                         //giving connecting city the last index and iterating
                         connectingCity = vertexIndex;
-                        ArrayList<Edge> connectingArrayList = new ArrayList<>();
+                        LinkedList<Edge> connectingArrayList = new LinkedList<>();
                         neighbors.add(connectingArrayList);
                         vertexIndex++;
                     }
@@ -101,13 +101,13 @@ public class WeightedGraph<V> {
                     //add edges of new cities, in both directions
                     //since first two cities, we know the index is 0 and 1
                     Edge tempEdge = new Edge(0,1, Cities.get(0), Cities.get(1));
-                    ArrayList<Edge> tempEdgeConnection = new ArrayList<Edge>();
+                    LinkedList<Edge> tempEdgeConnection = new LinkedList<>();
                     tempEdgeConnection.add(0, tempEdge);
                     neighbors.add(tempEdgeConnection);
                     //System.out.println(tempEdge.originName + ", " + tempEdge.destinationName +" just added to " + Cities.get(0));
                     //Adding reverse connection as undirected graph
                     Edge tempEdge2 = new Edge(1,0, Cities.get(1), Cities.get(0));
-                    ArrayList<Edge> tempEdgeConnection2 = new ArrayList<Edge>();
+                    LinkedList<Edge> tempEdgeConnection2 = new LinkedList<>();
                     tempEdgeConnection2.add(0, tempEdge2);
                     neighbors.add(tempEdgeConnection2);
                     //System.out.println(tempEdgeConnection2.get(0).originName + ", " + tempEdgeConnection2.get(0).destinationName +" just added to " + Cities.get(neighbors.indexOf(tempEdgeConnection2)));
@@ -140,7 +140,7 @@ public class WeightedGraph<V> {
     public void printAdjacencyList(){
         //for each cities' origin Arraylist, print out the name of the origin city, and it's connections
         //Dallas' origin arraylist => edgeList
-        for (ArrayList<Edge> originCityList : neighbors) {
+        for (LinkedList<Edge> originCityList : neighbors) {
             //edgeList[0] is dallas, print the name in Cities with same index
             System.out.print("\nCity " + originCityList.get(0).originName + ": ");
             //for each edge in the origin city's list of edges, print the connecting city name
