@@ -1,7 +1,21 @@
-6
-Dallas|Austin|98|47
-Austin|Houston|95|39
-Dallas|Houston|101|51
-Austin|Chicago|144|192
-New York|Baltimore|70|80
-Baltimore|Boston|40|80
+20
+Dallas|Austin|80|120
+Austin|Houston|30|90
+Houston|San Antonio|50|60
+San Antonio|Chicago|100|150
+Chicago|Memphis|120|180
+Memphis|Los Angeles|40|70
+Los Angeles|San Francisco|150|200
+San Francisco|Seattle|90|120
+Seattle|Denver|80|110
+Denver|Houston|70|90
+Dallas|Memphis|60|80
+Austin|Chicago|80|100
+Houston|Los Angeles|120|150
+San Antonio|San Francisco|60|90
+Chicago|Denver|100|130
+Memphis|Seattle|110|140
+Los Angeles|Denver|130|170
+San Francisco|Dallas|90|120
+Seattle|Austin|40|60
+Denver|Austin|110|140

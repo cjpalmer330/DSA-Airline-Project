@@ -2,9 +2,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-public class WeightedGraph<V> {
+public class WeightedGraph {
     //Simply an array list to store the cities' names as strings so we as users don't need to memorize index numbers
-    ArrayList<String> Cities = new ArrayList<>();
+    ArrayList<String> CitiesNames = new ArrayList<>();
 
     //Adjacency List
     /*
@@ -16,7 +16,8 @@ public class WeightedGraph<V> {
         Houston => {[Houston, Dallas],[Houston, San Antonio]}
         }
      */
-    LinkedList<LinkedList<Edge>> neighbors = new LinkedList<>();
+    LinkedList<LinkedList<Node>> neighbors = new LinkedList<>();
+    public WeightedGraph(){}
     public WeightedGraph(String fileName){
         try {
             //file reader and buffered reader to get info from data.txt
@@ -37,12 +38,12 @@ public class WeightedGraph<V> {
                 int originCity = -1, connectingCity = -1;
 
                 //if atleast one city in the array
-                if(!Cities.isEmpty()){
-                    for(int i = 0; i < Cities.size(); i++){
+                if(!CitiesNames.isEmpty()){
+                    for(int i = 0; i < CitiesNames.size(); i++){
                         //origin city was already in array
-                        if(tempTerms[0].equals(Cities.get(i))){
+                        if(tempTerms[0].equals(CitiesNames.get(i))){
                             originCity = i;
-                        } else if(tempTerms[1].equals(Cities.get(i))){
+                        } else if(tempTerms[1].equals(CitiesNames.get(i))){
                             connectingCity = i;
                         }
 
@@ -56,7 +57,7 @@ public class WeightedGraph<V> {
                     //Origin city was not in ArrayList
                     if(originCity == -1 ){
                         addCity(tempTerms[0]);
-                        LinkedList<Edge> originArrayList = new LinkedList<>();
+                        LinkedList<Node> originArrayList = new LinkedList<>();
                         neighbors.add(originArrayList);
                         //giving origin city the last index and iterating
                         originCity = vertexIndex;
@@ -67,7 +68,7 @@ public class WeightedGraph<V> {
                         this.addCity(tempTerms[1]);
                         //giving connecting city the last index and iterating
                         connectingCity = vertexIndex;
-                        LinkedList<Edge> connectingArrayList = new LinkedList<>();
+                        LinkedList<Node> connectingArrayList = new LinkedList<>();
                         neighbors.add(connectingArrayList);
                         vertexIndex++;
                     }
@@ -75,13 +76,12 @@ public class WeightedGraph<V> {
 
 
                     //add edges of new cities, in both directions
-                    Edge tempEdge = new Edge(originCity,connectingCity, Cities.get(originCity), Cities.get(connectingCity));
-                    neighbors.get(originCity).add(tempEdge);
-                   // System.out.println(tempEdge.originName + ", " + tempEdge.destinationName +" just added to " + Cities.get(originCity));
+                    Node tempNode = new Node(connectingCity, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(connectingCity));
+                    neighbors.get(originCity).add(tempNode);
                     //Adding reverse connection as our roads form an undirected graph
-                    Edge tempEdge2 = new Edge(connectingCity,originCity,Cities.get(connectingCity), Cities.get(originCity));
-                    neighbors.get(connectingCity).add(tempEdge2);
-                    //System.out.println(tempEdge2.originName + ", " + tempEdge2.destinationName +" just added to " + Cities.get(connectingCity));
+                    Node tempNode2 = new Node(originCity, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(originCity));
+                    neighbors.get(connectingCity).add(tempNode2);
+                    
 
 
                 } else { // the city array is empty
@@ -100,17 +100,15 @@ public class WeightedGraph<V> {
                      */
                     //add edges of new cities, in both directions
                     //since first two cities, we know the index is 0 and 1
-                    Edge tempEdge = new Edge(0,1, Cities.get(0), Cities.get(1));
-                    LinkedList<Edge> tempEdgeConnection = new LinkedList<>();
-                    tempEdgeConnection.add(0, tempEdge);
-                    neighbors.add(tempEdgeConnection);
-                    //System.out.println(tempEdge.originName + ", " + tempEdge.destinationName +" just added to " + Cities.get(0));
+                    Node tempNode = new Node(1, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(1));
+                    LinkedList<Node> tempNodeConnection = new LinkedList<>();
+                    tempNodeConnection.add(0, tempNode);
+                    neighbors.add(tempNodeConnection);
                     //Adding reverse connection as undirected graph
-                    Edge tempEdge2 = new Edge(1,0, Cities.get(1), Cities.get(0));
-                    LinkedList<Edge> tempEdgeConnection2 = new LinkedList<>();
-                    tempEdgeConnection2.add(0, tempEdge2);
-                    neighbors.add(tempEdgeConnection2);
-                    //System.out.println(tempEdgeConnection2.get(0).originName + ", " + tempEdgeConnection2.get(0).destinationName +" just added to " + Cities.get(neighbors.indexOf(tempEdgeConnection2)));
+                    Node tempNode2 = new Node(0, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(0));
+                    LinkedList<Node> tempNodeConnection2 = new LinkedList<>();
+                    tempNodeConnection2.add(0, tempNode2);
+                    neighbors.add(tempNodeConnection2);
                 }
 
                 //iterating to next edge in Data file
@@ -125,28 +123,44 @@ public class WeightedGraph<V> {
 
     //add vertex to the graph, and create new edge ArrayList
     public void addCity(String cityName) {
-        if (!Cities.contains(cityName)) {
-            Cities.add(cityName);
+        if (!CitiesNames.contains(cityName)) {
+            CitiesNames.add(cityName);
         }
     }
 
-    //when called check if edge already in the neighbors list, if not add relation
-    public void addEdge(Edge e) {
+    /*
+    //when called check if Node already in the neighbors list, if not add relation
+    public void addNode(Node sourceNode, Node) {
         //if neighbors doesn't have Dallas' connection to v city, add to neighbors list
-        if (!neighbors.get(e.u).contains(e.v)) {
-            neighbors.get(e.u).add(e);
+        if (!neighbors.get(neighbors.indexOf(sourceNode)).get()) {
+            neighbors.get(sourceNode.u).add(sourceNode);
         }
     }
+     */
+  
     public void printAdjacencyList(){
         //for each cities' origin Arraylist, print out the name of the origin city, and it's connections
         //Dallas' origin arraylist => edgeList
-        for (LinkedList<Edge> originCityList : neighbors) {
+        for (LinkedList<Node> originCityList : neighbors) {
             //edgeList[0] is dallas, print the name in Cities with same index
-            System.out.print("\nCity " + originCityList.get(0).originName + ": ");
+            System.out.print("\nCity " + CitiesNames.get(neighbors.indexOf(originCityList)) + ": ");
             //for each edge in the origin city's list of edges, print the connecting city name
-            for(Edge connection: originCityList){
-                System.out.print(Cities.get(connection.u) +" -> " + Cities.get(connection.v)+"  ");
+            for(Node connection: originCityList){
+                System.out.print(CitiesNames.get(neighbors.indexOf(originCityList)) +" - " + connection.timeToTravel + " -> " + CitiesNames.get(connection.cityIndex)+"  ");
             }
         }
+    }
+
+    /*
+
+    TODO ADD INPUT FILE READING TO THIS METHOD SO YOU JUST INPUT PATH REQUEST
+     */
+    //Dijkstra's call output is to console
+    public void shortestPath(int source, int destination){
+        System.out.println("City: " + neighbors.get(1).get(2).destinationName + neighbors.get(1).get(2).timeToTravel);
+        //System.out.println("Houston: " + neighbors.get(2).get(2).destinationName + neighbors.get(2).get(2).timeToTravel);
+        dijkstraShortestPath sourceDijk = new dijkstraShortestPath(neighbors, source);
+
+
     }
 }
