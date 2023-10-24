@@ -1,0 +1,202 @@
+import java.util.*;
+
+public class dijkstraShortestPath {
+  //arbitrary initial value
+  int vertices = -1;
+  LinkedList<LinkedList<Node>> graph = new LinkedList<LinkedList<Node>>();
+  int source = -1;
+  
+  //For any source the children have a set index with source.IndexOf(connectingCity)
+  //the grandchildren we can add to the visited and distance with the index of
+  /*
+            Dallas(1) -> Memphis(4), Houston(5)
+  Austin(0) -> Houston(2) ->
+            Chicago(3) ->
+   
+   
+   
+   
+   distance and visited could be an arraylist of nodes
+   then when doing check see if have the same city name so the order doesn't matter
+   if distance from Austin -> dallas(node) > Austin -> Houston -> Dallas {
+   distance to Dallas = austin - houston - dallas, mark dallas visited.
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   */
+  public dijkstraShortestPath(LinkedList<LinkedList<Node>> neighborNodes, int inputSourceIndex){
+    graph = neighborNodes;
+    //source is the index we are searching from: example used is all comments is Austin
+    source = inputSourceIndex;
+    vertices = graph.size();
+    //distance from Austin to all cities
+    ArrayList<Integer> distance = new ArrayList<Integer>();
+    
+    /*
+    //set for all nodes in graph
+    Stack<Node> nextCity = new Stack<Node>();
+    for(int i = 0; i < vertices; i++){
+      distance.add(i, Integer.MAX_VALUE);
+    }
+    
+    //sorting the children of source city in a stack
+    Stack<Node> tempStack = new Stack<Node>();
+    while(!nextCity.isEmpty()){
+      Node tempElem = nextCity.pop();
+      
+      while(!tempStack.isEmpty() && tempStack.peek().timeToTravel < tempElem.timeToTravel){
+        nextCity.push(tempStack.pop());
+      }
+      tempStack.push(tempElem);
+    }
+    while(!tempStack.isEmpty()){
+      nextCity.push(tempStack.pop());
+    }
+    */
+    
+    
+    //if direct child of source, set to travel time,
+    //Austin is index 1 and the source city
+    // need dallas houston and chicago to be added to distance in 1,2,3
+    //otherwise set to infinity
+    //first n distances are source's children plus the source node
+    distance.add(0, 0);
+    for(int v = 0; v < vertices - 1; v++){
+      if(v < graph.get(source).size()){
+        distance.add(graph.get(source).get(v).timeToTravel);
+        graph.get(source).get(v).parentIndex = source;
+      } else {
+        distance.add(Integer.MAX_VALUE);
+      }
+    }
+    System.out.println("INITIALIZATION: " + distance);
+    
+    //for all cities that directly connect to Austin
+    for(int u = 0; u < graph.get(source).size(); u++){
+      //find the index of the closest child of Austin
+      int closestChild = minDistance(distance);
+      closestChild++;
+      System.out.println("closestChild: " + graph.get(source).get(closestChild - 1).destinationName + " closestChild time: " + graph.get(source).get(closestChild - 1).timeToTravel + "distance(closest): " + distance.get(closestChild));
+
+      //for every grandchild of Austin
+      for(int v = 0; v < graph.get(closestChild).size(); v++) {
+        //if(childCity.destinationName.equalsIgnoreCase("Chicago")){
+          //System.out.println("closest child: " + closestChild + ", distance[v]: " + distance.get(v) + ", added: " + (graph.get(closestChild).get(v).timeToTravel) + ", child time: " + graph.get(closestChild).get(v).timeToTravel);
+       // }
+        
+        //if haven't visited all of child's grandchildren
+        boolean temp1 = graph.get(closestChild).get(v).timeToTravel != 0;
+        boolean temp2 = distance.get(closestChild) != Integer.MAX_VALUE;
+        boolean temp3 = (distance.get(closestChild) + graph.get(closestChild).get(v).timeToTravel) < distance.get(v + 1);
+        System.out.println("\nchildCity.visited: \t" + graph.get(source).get(closestChild).visited);
+        System.out.println("graph.get(closestChild).get(v).destinationName");
+        System.out.println("Node: " + graph.get(closestChild).get(v).destinationName + ", Visited: " + graph.get(closestChild).get(v).visited);
+        System.out.println("graph.get(closestChild).get(v).timeToTravel != 0: \n" + temp1);
+        System.out.println("distance.get(closestChild) != Integer.MAX_VALUE: \n" + temp2);
+        System.out.println("((distance.get(closestChild) + graph.get(closestChild).get(v).timeToTravel) < distance.get(v + 1)\n" + temp3);
+        //System.out.println("closest distance: " + distance.get(closestChild) + "\t" + graph.get(source).get(closestChild - 1).destinationName + "\t" + graph.get(closestChild).get(v).timeToTravel);
+        System.out.println(graph.get(closestChild).get(v).timeToTravel + "\n" +
+          (distance.get(closestChild) + graph.get(closestChild).get(v).timeToTravel));
+        System.out.println("distance v + 1: " + distance.get(v + 1));
+          
+          
+          
+          
+          
+          
+        if(!graph.get(source).get(closestChild).visited &&
+          //and the grandchild isn't Austin
+          graph.get(closestChild).get(v).timeToTravel != 0 &&
+          //origin is known
+          distance.get(closestChild) != Integer.MAX_VALUE &&
+          //distance from source -> closestChild -> destination < source -> destination
+          ((distance.get(closestChild) + graph.get(closestChild).get(v).timeToTravel) < distance.get(v + 1))
+        ) {
+          System.out.println("\nBEFORE -  distance[closest]: " + distance.get(closestChild) + " ,distance[v]: " + distance.get(v));
+          distance.set(v, distance.get(closestChild) + graph.get(closestChild).get(v).timeToTravel);
+          graph.get(closestChild).get(v).parentIndex = closestChild;
+          System.out.println("distance[0]: " + distance.get(0) + "distance[v]: " + distance.get(v) + ", closestChild.v: " + graph.get(closestChild).get(v).timeToTravel);
+          //System.out.println(Arrays.toString())
+          //graph.get(closestChild).get(v).timeToTravel = distance.get(v);
+        }
+        graph.get(closestChild).get(v).visited = true;
+      }
+      graph.get(source).get(closestChild - 1).visited = true;
+      //childCity.visited = true;
+      //mark that closestChild as visited
+      //visited[j][closestChild] = true;
+    }
+    //visit
+    printSolution(distance, vertices);
+    System.out.println("\n\ndistance array: " + distance);
+  }
+  
+  /*
+  public dijkstraShortestPath(LinkedList<LinkedList<Node>> neighbors, int source, int size) {
+  }
+  
+   */
+  
+  public void printSolution(ArrayList<Integer> distance, int vertices){
+    //we know the index of the source city
+    System.out.print("\n\nsource list size: " + vertices);
+    System.out.println("\n\nVertex\t\tDistance from source");
+    //iterate through the source city linked lists
+    for(int connectingIndex = 0; connectingIndex < graph.get(source).size(); connectingIndex++){
+      System.out.println(graph.get(source).get(connectingIndex).destinationName + "\t\t" + distance.get(connectingIndex + 1));
+    }
+  }
+
+  int minDistance(ArrayList<Integer> distance){
+    //set min distance to infinity
+    int min = Integer.MAX_VALUE;
+    int min_index = -1;
+    //check each vertex
+    //if not visited, and this distance to the node is less than infinity
+    for (int i = 0; i < graph.get(source).size() - 1; i++) {
+      if (!graph.get(source).get(i).visited && distance.get(i + 1) <= min) {
+        min = distance.get(i + 1);
+        //distance.set(i, childCity.timeToTravel);
+        //return index of the city relative to the source city NOT THE GRAPH
+        min_index = i;
+      }
+    }
+
+    return min_index;
+  }
+  /*
+  public String[] shortestTime(int originCity, int destinationCity){
+    int v = adjacencyList.size();
+    boolean visited[] = new boolean[v];
+    Stack<Integer> pathResultStack = new Stack<Integer>();
+    Stack<Edge> nextToProcess = new Stack<Edge>();
+    //putting source in the results stack
+    pathResultStack.push(originCity);
+    for(int i = 1; i < v - 1; i++){
+      nextToProcess.push();
+    }
+
+    //get origin city's linked list
+    for( Edge road: adjacencyList.get(originCity)){
+      int citySmallestTime = findMinCity(time, visited);
+      //explore connections
+      //for(int)
+    }
+
+   */
+    //String[] possiblePaths = new String[3];
+
+
+
+    //return possiblePaths;
+  //}
+
+  //private int findMinCity(int[] timeToCity, boolean[] visited){}
+}

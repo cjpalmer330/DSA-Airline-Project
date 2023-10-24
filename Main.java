@@ -7,7 +7,8 @@ public class Main {
         WeightedGraph Graph = new WeightedGraph(fileName);
 
         Graph.printAdjacencyList();
-        Graph.shortestPath(1, 3);
+        //System.out.println(Graph.neighbors.get(1));
+        Graph.shortestPath(5, 9);
 
     }
 }

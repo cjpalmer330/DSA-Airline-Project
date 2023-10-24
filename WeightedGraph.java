@@ -76,10 +76,10 @@ public class WeightedGraph {
 
 
                     //add edges of new cities, in both directions
-                    Node tempNode = new Node(connectingCity, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(connectingCity));
+                    Node tempNode = new Node(connectingCity, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(originCity), CitiesNames.get(connectingCity));
                     neighbors.get(originCity).add(tempNode);
                     //Adding reverse connection as our roads form an undirected graph
-                    Node tempNode2 = new Node(originCity, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(originCity));
+                    Node tempNode2 = new Node(originCity, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(connectingCity), CitiesNames.get(originCity));
                     neighbors.get(connectingCity).add(tempNode2);
                     
 
@@ -100,12 +100,12 @@ public class WeightedGraph {
                      */
                     //add edges of new cities, in both directions
                     //since first two cities, we know the index is 0 and 1
-                    Node tempNode = new Node(1, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(1));
+                    Node tempNode = new Node(1, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(0), CitiesNames.get(1));
                     LinkedList<Node> tempNodeConnection = new LinkedList<>();
                     tempNodeConnection.add(0, tempNode);
                     neighbors.add(tempNodeConnection);
                     //Adding reverse connection as undirected graph
-                    Node tempNode2 = new Node(0, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]), CitiesNames.get(0));
+                    Node tempNode2 = new Node(0, Integer.parseInt(tempTerms[2]), Integer.parseInt(tempTerms[3]),CitiesNames.get(1), CitiesNames.get(0));
                     LinkedList<Node> tempNodeConnection2 = new LinkedList<>();
                     tempNodeConnection2.add(0, tempNode2);
                     neighbors.add(tempNodeConnection2);
@@ -157,9 +157,11 @@ public class WeightedGraph {
      */
     //Dijkstra's call output is to console
     public void shortestPath(int source, int destination){
-        System.out.println("City: " + neighbors.get(1).get(2).destinationName + neighbors.get(1).get(2).timeToTravel);
-        //System.out.println("Houston: " + neighbors.get(2).get(2).destinationName + neighbors.get(2).get(2).timeToTravel);
-        dijkstraShortestPath sourceDijk = new dijkstraShortestPath(neighbors, source);
+        System.out.println("\n\nSource city: " + neighbors.get(source).get(0).sourceName + "\t\tDestination City: " + neighbors.get(destination).get(0).sourceName);
+        dijkstraShortestPath timeDijk = new dijkstraShortestPath(neighbors, source, destination);
+        
+        timeDijk.printPath();
+        
 
 
     }
