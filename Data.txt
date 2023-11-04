@@ -1,4 +1,4 @@
-25
+26
 Dallas|Austin|54|123
 Austin|Houston|156|78
 Houston|San Antonio|98|134
@@ -7,21 +7,21 @@ Chicago|Memphis|123|45
 Memphis|Los Angeles|76|112
 Los Angeles|San Francisco|189|32
 San Francisco|Seattle|45|177
-Seattle|Denver|88|124
-Dallas|Seattle|20|20
-Denver|Houston|72|156
-Dallas|Memphis|110|67
-Austin|Chicago|33|145
 Houston|Los Angeles|177|88
 San Antonio|San Francisco|112|76
 Chicago|Denver|67|110
 Memphis|Seattle|99|83
 Los Angeles|Denver|150|42
 San Francisco|Dallas|54|98
+San Antonio|Memphis|32|99
+Chicago|Los Angeles|145|33
+Seattle|Denver|88|124
+Dallas|Seattle|20|20
+Denver|Houston|72|156
+Dallas|Memphis|110|67
+Austin|Chicago|33|145
 Austin|Seattle|123|10
 Denver|Austin|34|176
 Dallas|Houston|111|89
 Austin|San Antonio|45|157
 Houston|Chicago|89|111
-San Antonio|Memphis|32|99
-Chicago|Los Angeles|145|33
